@@ -1,0 +1,59 @@
+<article class="artwork-card" data-id="<%= artwork.id %>">
+  <!-- artwork image link -->
+  <a href="/art/detail/<%= artwork.id %>" class="card-image-link">
+    <div class="card-image-wrap">
+      <% if (artwork.imageUrl) { %>
+        <img src="<%= artwork.thumbnailUrl || artwork.imageUrl %>" alt="<%= artwork.title %>" class="card-image"
+          loading="lazy" onerror="this.parentElement.classList.add('no-image')" />
+        <% } else { %>
+          <div class="card-no-image">No Image</div>
+          <% } %>
+    </div>
+  </a>
+
+  <!-- artwork information -->
+  <div class="card-body">
+    <a href="/art/detail/<%= artwork.id %>" class="card-title">
+      <%= artwork.title || 'Untitled' %>
+    </a>
+    <p class="card-artist">
+      <%= artwork.artist_title || artwork.artist_display || 'Unknown Artist' %>
+    </p>
+    <p class="card-date">
+      <%= artwork.date_display || '' %>
+    </p>
+
+    <!-- save button (shown only when savedIds context is available) -->
+    <% if (typeof savedIds !=='undefined' ) { %>
+      <% if (user) { %>
+        <% const isSaved=savedIds.has(artwork.id); %>
+          <button class="card-save-btn <%= isSaved ? 'saved' : '' %>" data-artwork-id="<%= artwork.id %>"
+            data-title="<%= (artwork.title || 'Untitled').replace(/" /g, '&quot;' ) %>"
+            data-artist="<%= (artwork.artist_title || '' ).replace(/"/g, '&quot;' ) %>"
+              data-image-id="<%= artwork.image_id || '' %>"
+                data-date="<%= artwork.date_display || '' %>"
+                  data-medium="<%= (artwork.medium_display || '' ).replace(/"/g, '&quot;' ) %>"
+                    data-color-h="<%= artwork.color ? artwork.color.h : '' %>"
+                      data-color-s="<%= artwork.color ? artwork.color.s : '' %>"
+                        data-color-l="<%= artwork.color ? artwork.color.l : '' %>"
+                          title="<%= isSaved ? 'Saved to gallery' : 'Save to gallery' %>"
+                            ><%= isSaved ? '♥' : '♡' %></button>
+          <% } else { %>
+            <a href="/auth/login" class="card-save-btn" title="Sign in to save">♡</a>
+            <% } %>
+              <% } %>
+  </div>
+
+  <!-- dominant color swatch -->
+  <% if (artwork.dominantHex) { %>
+    <div class="card-color-swatch">
+      <div class="swatch-bar" style="background:<%= artwork.dominantHex %>"></div>
+      <div class="swatch-label">
+        <span class="swatch-dot" style="background:<%= artwork.dominantHex %>"></span>
+        <span class="swatch-hex">
+          <%= artwork.dominantHex %>
+        </span>
+      </div>
+    </div>
+    <% } %>
+</article>

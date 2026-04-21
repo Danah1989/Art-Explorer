@@ -1,0 +1,104 @@
+<!-- hero Section -->
+<div class="hero">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-1">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-2">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-3">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-4">
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Art Institute of Chicago Collection</p>
+    <h1 class="hero-title">Discover Art<br /><em>by Color & Era</em></h1>
+    <p class="hero-subtitle">Search thousands of public domain masterworks. Filter by color palette, time period, or
+      artistic style.</p>
+
+    <!-- search form -->
+    <form action="/art/search" method="GET" class="hero-search">
+      <input type="text" name="q" placeholder="Search by title, artist, style…" class="hero-input" autocomplete="off" />
+      <button type="submit" class="hero-search-btn">Explore</button>
+    </form>
+
+    <!-- quick filter links -->
+    <div class="hero-quick-links">
+      <a href="/art/search?q=portrait" class="quick-link">
+        <span class="ql-icon ql-portrait"></span>
+        Portraits
+      </a>
+      <a href="/art/search?q=Landscape" class="quick-link">
+        <span class="ql-icon" style="background:linear-gradient(135deg,#e63946,#457b9d,#2a9d8f)"></span>
+        Landscape
+      </a>
+      <a href="/art/search?q=Still Life" class="quick-link">
+        <span class="ql-icon ql-era"></span>
+        Still Life
+      </a>
+    </div>
+  </div>
+
+  <!-- featured artwork -->
+  <% if (featured && featured.imageUrl) { %>
+    <div class="hero-featured">
+      <a href="/art/detail/<%= featured.id %>" class="hero-img-link">
+        <img src="<%= featured.imageUrl %>" alt="<%= featured.title %>" class="hero-img" />
+        <div class="hero-img-caption">
+          <span class="caption-title">
+            <%= featured.title %>
+          </span>
+          <span class="caption-artist">
+            <%= featured.artist_title || featured.artist_display %>
+          </span>
+        </div>
+      </a>
+    </div>
+    <% } %>
+</div>
+
+
+<!-- browse by mood section -->
+<section class="mood-section">
+  <h2 class="section-title">Browse by Mood</h2>
+  <div class="mood-grid">
+    <a href="/art/search?colorHue=210" class="mood-card mood-calm">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Calm & Serene</span>
+      <span class="mood-desc">Blues & Greens</span>
+    </a>
+    <a href="/art/search?colorHue=0" class="mood-card mood-energetic">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Bold & Energetic</span>
+      <span class="mood-desc">Reds & Oranges</span>
+    </a>
+    <a href="/art/search?colorHue=50" class="mood-card mood-joyful">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Warm & Joyful</span>
+      <span class="mood-desc">Yellows & Golds</span>
+    </a>
+    <a href="/art/search?colorHue=275" class="mood-card mood-mysterious">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Mysterious</span>
+      <span class="mood-desc">Violets & Purples</span>
+    </a>
+  </div>
+</section>
+
+<!-- browse by era section -->
+<section class="era-section">
+  <h2 class="section-title">Explore by Era</h2>
+  <div class="era-grid">
+    <a href="/art/search?dateStart=1400&dateEnd=1600" class="era-card">
+      <span class="era-years">1400 – 1600</span>
+      <span class="era-name">Renaissance</span>
+    </a>
+    <a href="/art/search?dateStart=1600&dateEnd=1750" class="era-card">
+      <span class="era-years">1600 – 1750</span>
+      <span class="era-name">Baroque</span>
+    </a>
+    <a href="/art/search?dateStart=1850&dateEnd=1910" class="era-card">
+      <span class="era-years">1850 – 1910</span>
+      <span class="era-name">Impressionism</span>
+    </a>
+    <a href="/art/search?dateStart=1900&dateEnd=1950" class="era-card">
+      <span class="era-years">1900 – 1950</span>
+      <span class="era-name">Modernism</span>
+    </a>
+  </div>
+</section>

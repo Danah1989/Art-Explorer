@@ -1,0 +1,60 @@
+<nav class="navbar">
+  <div class="nav-inner">
+    <!-- logo -->
+    <a href="/" class="nav-logo">
+      <img src="/images/logo.png" alt="CHROMA Logo" class="logo-img">
+      <span class="logo-text">CHROMA</span>
+    </a>
+
+    <!-- navigation links -->
+    <div class="nav-links" id="navLinks">
+      <a href="/art/search"
+        class="nav-link <%= currentPath.startsWith('/art/search') || currentPath.startsWith('/art/type') ? 'active' : '' %>">Browse</a>
+
+      <% if (user && user.username) { %>
+        <!-- authenticated user navigation -->
+        <a href="/favorites" class="nav-link <%= currentPath === '/favorites' ? 'active' : '' %>">My Gallery</a>
+
+        <!-- user dropdown menu -->
+        <div class="nav-user-dropdown" id="userDropdown">
+          <button class="nav-user-btn" id="userDropdownBtn" aria-haspopup="true" aria-expanded="false">
+            <% if (user.avatar) { %>
+              <img src="<%= user.avatar %>" alt="<%= user.displayName || user.username %>" class="user-avatar-img">
+              <% } else { %>
+                <span class="user-avatar">
+                  <%= (user.displayName || user.username).charAt(0).toUpperCase() %>
+                </span>
+                <% } %>
+                  <span class="user-name">
+                    <%= user.displayName || user.username %>
+                  </span>
+                  <span class="dropdown-arrow">▾</span>
+          </button>
+
+          <!-- dropdown menu content -->
+          <div class="dropdown-menu" id="dropdownMenu" role="menu">
+            <div class="dropdown-header">
+              <div class="dropdown-username">
+                <%= user.displayName || user.username %>
+              </div>
+              <div class="dropdown-email">
+                <%= user.email %>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="/auth/logout" class="dropdown-item dropdown-signout" role="menuitem">Sign Out</a>
+          </div>
+        </div>
+        <% } else { %>
+          <!-- guest navigation -->
+          <a href="/auth/login" class="nav-btn btn-ghost">Sign In</a>
+          <a href="/auth/register" class="nav-btn btn-primary">Join</a>
+          <% } %>
+    </div>
+
+    <!-- mobile menu toggle button -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>

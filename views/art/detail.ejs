@@ -1,0 +1,245 @@
+<div class="detail-page">
+  <div class="detail-nav">
+    <a href="javascript:history.back()" class="back-link">← Back</a>
+  </div>
+
+  <div class="detail-layout">
+    <!-- image column -->
+    <div class="detail-image-col">
+      <% if (artwork.imageUrl) { %>
+        <div class="detail-image-wrap">
+          <img src="<%= artwork.imageUrl %>" alt="<%= artwork.title %>" class="detail-image" />
+        </div>
+        <% } else { %>
+          <div class="detail-no-image">No image available</div>
+          <% } %>
+
+            <!-- dominant color swatch display -->
+            <% if (artwork.dominantHex) { %>
+              <div class="detail-color-swatch">
+                <div class="detail-swatch-bar" style="background:<%= artwork.dominantHex %>"></div>
+                <div class="detail-swatch-footer">
+                  <span class="detail-swatch-dot" style="background:<%= artwork.dominantHex %>"></span>
+                  <span class="detail-swatch-label">Dominant Color</span>
+                  <span class="detail-swatch-hex">
+                    <%= artwork.dominantHex %>
+                  </span>
+                </div>
+              </div>
+              <% } %>
+    </div>
+
+    <!-- information Column -->
+    <div class="detail-info-col">
+      <h1 class="detail-title">
+        <%= artwork.title || 'Untitled' %>
+      </h1>
+      <p class="detail-artist">
+        <%= artwork.artist_display || 'Unknown Artist' %>
+      </p>
+
+      <!-- artwork metadata -->
+      <div class="detail-meta">
+        <% if (artwork.date_display) { %>
+          <div class="meta-row">
+            <span class="meta-label">Date</span>
+            <span class="meta-value">
+              <%= artwork.date_display %>
+            </span>
+          </div>
+          <% } %>
+            <% if (artwork.medium_display) { %>
+              <div class="meta-row">
+                <span class="meta-label">Medium</span>
+                <span class="meta-value">
+                  <%= artwork.medium_display %>
+                </span>
+              </div>
+              <% } %>
+                <% if (artwork.dimensions) { %>
+                  <div class="meta-row">
+                    <span class="meta-label">Dimensions</span>
+                    <span class="meta-value">
+                      <%= artwork.dimensions %>
+                    </span>
+                  </div>
+                  <% } %>
+                    <% if (artwork.place_of_origin) { %>
+                      <div class="meta-row">
+                        <span class="meta-label">Origin</span>
+                        <span class="meta-value">
+                          <%= artwork.place_of_origin %>
+                        </span>
+                      </div>
+                      <% } %>
+                        <% if (artwork.artwork_type_title) { %>
+                          <div class="meta-row">
+                            <span class="meta-label">Type</span>
+                            <span class="meta-value">
+                              <%= artwork.artwork_type_title %>
+                            </span>
+                          </div>
+                          <% } %>
+                            <% if (artwork.style_title) { %>
+                              <div class="meta-row">
+                                <span class="meta-label">Style</span>
+                                <span class="meta-value">
+                                  <%= artwork.style_title %>
+                                </span>
+                              </div>
+                              <% } %>
+      </div>
+
+      <!-- artwork description -->
+      <% if (artwork.description) { %>
+        <div class="detail-description">
+          <h3>About this Work</h3>
+          <div class="description-text"><%- artwork.description %></div>
+        </div>
+        <% } %>
+
+          <!-- favorites section -->
+          <div class="favorites-section" id="favSection">
+            <% if (user) { %>
+
+              <!-- toggle favorite button -->
+              <button class="btn-toggle-fav <%= isFavorited ? 'is-saved' : '' %>" id="toggleFavBtn"
+                data-artwork-id="<%= artwork.id %>" data-title="<%= (artwork.title || '').replace(/" /g, '&quot;' ) %>"
+                data-artist="<%= (artwork.artist_title || '' ).replace(/"/g, '&quot;' ) %>"
+                  data-image-id="<%= artwork.image_id || '' %>"
+                    data-date="<%= artwork.date_display || '' %>"
+                      data-medium="<%= (artwork.medium_display || '' ).replace(/"/g, '&quot;' ) %>"
+                        data-color-h="<%= artwork.color ? artwork.color.h : '' %>"
+                          data-color-s="<%= artwork.color ? artwork.color.s : '' %>"
+                            data-color-l="<%= artwork.color ? artwork.color.l : '' %>"
+                              data-favorite-id="<%= favorite ? favorite._id : '' %>"
+                                >
+                                <span class="fav-btn-icon">
+                                  <%= isFavorited ? '♥' : '♡' %>
+                                </span>
+                                <span class="fav-btn-text">
+                                  <%= isFavorited ? 'Saved to Gallery' : 'Save to Gallery' %>
+                                </span>
+              </button>
+
+              <!-- notes panel (visible when favorited) -->
+              <div class="notes-panel" id="notesPanel" style="<%= isFavorited ? '' : 'display:none' %>">
+                <form class="notes-form" id="notesForm">
+                  <label class="form-label" for="notesInput">Your Notes</label>
+                  <textarea id="notesInput" class="notes-textarea"
+                    placeholder="Add your thoughts about this artwork…"><%= favorite ? favorite.notes : '' %></textarea>
+                  <button type="submit" class="notes-save-btn">Save Notes</button>
+                  <span class="notes-saved-msg" id="notesSavedMsg"></span>
+                </form>
+              </div>
+
+              <% } else { %>
+                <a href="/auth/login" class="btn-toggle-fav">
+                  <span class="fav-btn-icon">♡</span>
+                  <span class="fav-btn-text">Sign in to Save</span>
+                </a>
+                <% } %>
+          </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // artwork detail page interactive functionality
+  (function () {
+    const btn = document.getElementById('toggleFavBtn');
+    const notesPanel = document.getElementById('notesPanel');
+    const notesForm = document.getElementById('notesForm');
+    const notesInput = document.getElementById('notesInput');
+    const notesSavedMsg = document.getElementById('notesSavedMsg');
+
+    if (!btn) return;
+
+    let favoriteId = btn.dataset.favoriteId || null;
+    let saving = false;
+
+    // toggle favorite status (save/unsave)
+    btn.addEventListener('click', async () => {
+      if (saving) return;
+      saving = true;
+      btn.disabled = true;
+
+      try {
+        const body = new URLSearchParams({
+          artworkId: btn.dataset.artworkId,
+          title: btn.dataset.title,
+          artist: btn.dataset.artist,
+          imageId: btn.dataset.imageId,
+          dateDisplay: btn.dataset.date,
+          medium: btn.dataset.medium,
+          colorH: btn.dataset.colorH,
+          colorS: btn.dataset.colorS,
+          colorL: btn.dataset.colorL,
+          notes: notesInput ? notesInput.value : ''
+        });
+
+        const res = await fetch('/favorites/toggle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json'
+          },
+          body: body.toString()
+        });
+
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        if (data.action === 'added') {
+          favoriteId = data.favoriteId;
+          btn.classList.add('is-saved');
+          btn.querySelector('.fav-btn-icon').textContent = '♥';
+          btn.querySelector('.fav-btn-text').textContent = 'Saved to Gallery';
+          notesPanel.style.display = '';
+          notesInput.focus();
+        } else {
+          favoriteId = null;
+          btn.classList.remove('is-saved');
+          btn.querySelector('.fav-btn-icon').textContent = '♡';
+          btn.querySelector('.fav-btn-text').textContent = 'Save to Gallery';
+          notesPanel.style.display = 'none';
+          if (notesInput) notesInput.value = '';
+        }
+      } catch (err) {
+        console.error('Toggle error:', err);
+      } finally {
+        saving = false;
+        btn.disabled = false;
+      }
+    });
+
+    // save notes via AJAX
+    if (notesForm) {
+      notesForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!favoriteId) return;
+
+        try {
+          const body = new URLSearchParams({ notes: notesInput.value });
+          const res = await fetch(`/favorites/${favoriteId}/notes`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Accept': 'application/json',
+              'X-HTTP-Method-Override': 'PUT'
+            },
+            body: body.toString()
+          });
+          const data = await res.json();
+          if (data.success) {
+            notesSavedMsg.textContent = 'Saved ✓';
+            notesSavedMsg.classList.add('visible');
+            setTimeout(() => notesSavedMsg.classList.remove('visible'), 2000);
+          }
+        } catch (err) {
+          console.error('Notes save error:', err);
+        }
+      });
+    }
+  })();
+</script>
