@@ -290,6 +290,29 @@ All filters combine in a single query:
 | `CACHE_TTL` | No | 3600 | Cache TTL in seconds |
 | `NODE_ENV` | No | development | Environment mode |
 
+## Screenshots
+
+## Future Work
+- Add an artwork recommendation system based on user preferences.
+- Enable users to leave comments and reviews on artworks.
+- Integrate an AI-powered guide to help users explore and understand artworks.
+- Add multilingual support for a wider range of users.
+- 
+## Resources
+`- Art Institute of Chicago API  
+  https://api.artic.edu/docs/
+  
+- MongoDB Documentation  
+  https://www.mongodb.com/docs/
+
+- Express.js Documentation  
+  https://expressjs.com/
+
+- Passport.js Documentation  
+  https://www.passportjs.org/docs/
+
+- Node.js Documentation  
+  https://nodejs.org/docs/latest/api/
 
 ## Notes
 
