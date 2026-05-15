@@ -299,9 +299,10 @@ All filters combine in a single query:
 - Add multilingual support for a wider range of users.
   
 ## Resources
-`- Art Institute of Chicago API  
-  https://api.artic.edu/docs/
-  
+
+  - Art Institute of Chicago API
+    https://api.artic.edu/docs/
+
 - MongoDB Documentation  
   https://www.mongodb.com/docs/
 
