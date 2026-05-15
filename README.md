@@ -9,6 +9,10 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 | Reema Dhaifallah Alanazi |
 | Hessah |
 
+## Projec Goals
+
+## Website Flowchart
+the following flowchart demonstrates the main workflow of the system.
 
 ## Tech Stack
 
