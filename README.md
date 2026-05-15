@@ -14,6 +14,9 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 
 | Technology | Purpose |
 |------------|---------|
+| HTML | Page Structure|
+| CSS | Styling and layout|
+| JavaScript | Frontend interactivity|
 | Node.js | Runtime environment |
 | Express.js | Web framework (MVC architecture) |
 | MongoDB + Mongoose | Database and ODM |
@@ -23,6 +26,7 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 | Passport.js | Google OAuth 2.0 authentication |
 | connect-mongo | MongoDB session store |
 | Axios | HTTP client for API requests |
+| Git & GitHub | Code versioning and team collaboration |
 
 ## Features
 
