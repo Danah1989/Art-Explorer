@@ -297,7 +297,7 @@ All filters combine in a single query:
 - Enable users to leave comments and reviews on artworks.
 - Integrate an AI-powered guide to help users explore and understand artworks.
 - Add multilingual support for a wider range of users.
-- 
+  
 ## Resources
 `- Art Institute of Chicago API  
   https://api.artic.edu/docs/
