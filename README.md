@@ -10,6 +10,12 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 | Hessah |
 
 ## Projec Goals
+- Create an interactive platform for exploring artworks and museum collections.
+- Allow users to search and view detailed artwork information.
+- Implement secure Google OAuth authentication.
+- Enable users to save their favorite artworks.
+- Develop a user-friendly web experience.
+- Enhance users’ interest in art through an interactive digital experience.
 
 ## Website Flowchart
 the following flowchart demonstrates the main workflow of the system.
