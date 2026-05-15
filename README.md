@@ -2,6 +2,14 @@
 
 A full-stack web application for exploring the Art Institute of Chicago's public domain collection. Search and filter artworks by keyword, time period, color palette, and artwork type. Save favorites to a personal gallery with notes.
 
+## Team Members
+| Name | 
+|------------|
+| Dana Ali Alqarni | 
+| Reema Dhaifallah Alanazi |
+| Hessah |
+
+
 ## Tech Stack
 
 | Technology | Purpose |
