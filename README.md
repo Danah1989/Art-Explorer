@@ -300,7 +300,7 @@ All filters combine in a single query:
   
 ## Resources
 
-  - Art Institute of Chicago API
+  - Art Institute of Chicago API     
     https://api.artic.edu/docs/
 
 - MongoDB Documentation  
