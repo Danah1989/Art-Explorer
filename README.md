@@ -302,7 +302,8 @@ All filters combine in a single query:
 - Sign In Page
     [view Sign Page](screenshots/joinPage.png)
 - Home Page
-    [view Home Page](screenshots/homePage1.png)[view Home Page Cont](screenshots/homePage2Cont.png)
+    [view Home Page](screenshots/homePage1.png)
+    [view Home Page Cont](screenshots/homePage2Cont.png)
 - Browse Page
     [view Browse Page](screenshots/browsePage.png)
 - Art details Page
