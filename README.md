@@ -298,10 +298,15 @@ All filters combine in a single query:
 
 ## Screenshots
 - Join Page
+    [view Join Page](screenshots/joinPage.png)
 - Sign In Page
+    [view Sign Page](screenshots/joinPage.png)
 - Home Page
+    [view Home Page](screenshots/joinPage.png)
 - Browse Page
+    [view Browse Page](screenshots/joinPage.png)
 - Art details Page
+    [view Art details Page](screenshots/joinPage.png)
 ## Future Work
 - Add an artwork recommendation system based on user preferences.
 - Enable users to leave comments and reviews on artworks.
