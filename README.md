@@ -302,11 +302,11 @@ All filters combine in a single query:
 - Sign In Page
     [view Sign Page](screenshots/joinPage.png)
 - Home Page
-    [view Home Page](screenshots/homePage1.png)(screenshots/homePage2Cont.png)
+    [view Home Page](screenshots/homePage1.png)[view Home Page Cont](screenshots/homePage2Cont.png)
 - Browse Page
-    [view Browse Page](screenshots/joinPage.png)
+    [view Browse Page](screenshots/browsePage.png)
 - Art details Page
-    [view Art details Page](screenshots/joinPage.png)
+    [view Art details Page](screenshots/artPage.png)
 ## Future Work
 - Add an artwork recommendation system based on user preferences.
 - Enable users to leave comments and reviews on artworks.
