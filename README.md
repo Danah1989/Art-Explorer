@@ -297,7 +297,11 @@ All filters combine in a single query:
 | `NODE_ENV` | No | development | Environment mode |
 
 ## Screenshots
-
+- Join Page
+- Sign In Page
+- Home Page
+- Browse Page
+- Art details Page
 ## Future Work
 - Add an artwork recommendation system based on user preferences.
 - Enable users to leave comments and reviews on artworks.
