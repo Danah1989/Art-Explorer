@@ -53,9 +53,9 @@
 </div>
 
 
-<!-- browse by mood section -->
+<!-- browse by color section -->
 <section class="mood-section">
-  <h2 class="section-title">Browse by Mood</h2>
+  <h2 class="section-title">Browse by Color</h2>
   <div class="mood-grid">
     <a href="/art/search?colorHue=210" class="mood-card mood-calm">
       <div class="mood-swatch"></div>
@@ -80,25 +80,35 @@
   </div>
 </section>
 
-<!-- browse by era section -->
-<section class="era-section">
-  <h2 class="section-title">Explore by Era</h2>
-  <div class="era-grid">
-    <a href="/art/search?dateStart=1400&dateEnd=1600" class="era-card">
-      <span class="era-years">1400 – 1600</span>
-      <span class="era-name">Renaissance</span>
-    </a>
-    <a href="/art/search?dateStart=1600&dateEnd=1750" class="era-card">
-      <span class="era-years">1600 – 1750</span>
-      <span class="era-name">Baroque</span>
-    </a>
-    <a href="/art/search?dateStart=1850&dateEnd=1910" class="era-card">
-      <span class="era-years">1850 – 1910</span>
-      <span class="era-name">Impressionism</span>
-    </a>
-    <a href="/art/search?dateStart=1900&dateEnd=1950" class="era-card">
-      <span class="era-years">1900 – 1950</span>
-      <span class="era-name">Modernism</span>
-    </a>
-  </div>
-</section>
+<!-- recommended by mood section -->
+<section class="mood-section">
+    <h2 class="section-title">Choose your current mood and discover matching artworks</h2>
+  <div class="mood-grid">
+    <a href="/art/search?q=landscape" class="mood-card mood-calm">
+      <span class="mood-label">Calm & Relaxing</span>
+       <span class="mood-desc">Peaceful landscapes & soothing colors</span>
+      </a>
+      <a href="/art/search?q=colorful" class="mood-card mood-happy">
+         <span class="mood-label">Bright & Happy</span>
+         <span class="mood-desc">Cheerful artworks full of light & color</span>
+        </a>
+        
+        <a href="/art/search?q=night" class="mood-card mood-dark">
+          <span class="mood-label">Dark & Moody</span>
+          <span class="mood-desc">Shadowy scenes with dramatic emotions</span>
+        </a>
+        
+        <a href="/art/search?q=love" class="mood-card mood-romantic">
+          <span class="mood-label">Romantic & Dreamy</span>
+          <span class="mood-desc">Soft portraits & emotional moments</span>
+        </a>
+        <a href="/art/search?q=garden" class="mood-card mood-nature">
+           <span class="mood-label">Natural & Fresh</span>
+           <span class="mood-desc">Nature-inspired art with outdoor beauty</span>
+          </a>
+          <a href="/art/search?q=moon" class="mood-card mood-mysterious">
+            <span class="mood-label">Mystic & Magical</span>
+            <span class="mood-desc">Moonlit scenes & mysterious fantasy vibes</span>
+          </a>
+        </div>
+      </section>
