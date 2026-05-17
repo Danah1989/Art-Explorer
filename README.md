@@ -7,7 +7,6 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 |------------|
 | Dana Ali Alqarni | 
 | Reema Dhaifallah Alanazi |
-| Hessah |
 
 ## Projec Goals
 - Create an interactive platform for exploring artworks and museum collections.
