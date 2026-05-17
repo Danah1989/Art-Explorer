@@ -13,6 +13,7 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const artRoutes = require('./routes/artRoutes');
 const favoriteRoutes = require('./routes/favoriteRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 const pageRoutes = require('./routes/pageRoutes');
 
 const app = express();
@@ -91,6 +92,7 @@ app.use('/', pageRoutes);
 app.use('/auth', authRoutes);
 app.use('/art', artRoutes);
 app.use('/favorites', favoriteRoutes);
+app.use('/api', apiRoutes);
 
 // error handling middleware
 app.use(notFound);

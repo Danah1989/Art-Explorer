@@ -9,7 +9,10 @@ router.use(requireAuth);
 // view user's favorites gallery
 router.get('/', favoriteController.index);
 
-// toggle favorite status (add/remove)
+// check if an artwork is favorited (returns JSON)
+router.get('/check/:artworkId', favoriteController.check);
+
+// toggle favorite — POST adds, DELETE /toggle removes
 router.post('/toggle', favoriteController.toggle);
 
 // add artwork to favorites

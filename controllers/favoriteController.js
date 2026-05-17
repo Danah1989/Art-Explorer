@@ -79,6 +79,20 @@ exports.remove = async (req, res) => {
   }
 };
 
+// GET /favorites/check/:artworkId  — check if user has favorited an artwork
+exports.check = async (req, res) => {
+  try {
+    const existing = await Favorite.findOne({
+      user: req.session.user.id,
+      artworkId: Number(req.params.artworkId)
+    });
+    res.json({ success: true, isFavorited: !!existing, favoriteId: existing?._id || null });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
 // toggle favorite status (add if not saved, remove if already saved)
 exports.toggle = async (req, res) => {
   const { artworkId, title, artist, imageId, dateDisplay, medium, colorH, colorS, colorL, notes } = req.body;
