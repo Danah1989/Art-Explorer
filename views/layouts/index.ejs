@@ -1,0 +1,196 @@
+<div class="favorites-page">
+  <div class="favorites-header">
+    <h1 class="page-title">My Gallery</h1>
+    <p class="page-subtitle"><%= favorites.length %> saved artwork<%= favorites.length !== 1 ? 's' : '' %></p>
+  </div>
+
+  <!-- empty state -->
+  <% if (favorites.length === 0) { %>
+    <div class="empty-state">
+      <p class="empty-title">Your gallery is empty</p>
+      <p class="empty-sub">Start saving artworks you love from the collection.</p>
+      <a href="/art/search" class="btn-primary">Explore Art</a>
+    </div>
+  <% } else { %>
+    <!-- favorites grid -->
+    <div class="favorites-grid" id="favoritesGrid">
+      <% favorites.forEach(fav => { %>
+        <article class="fav-card" id="fav-<%= fav._id %>">
+          <a href="/art/detail/<%= fav.artworkId %>" class="fav-image-link">
+            <div class="fav-image-wrap">
+              <% if (fav.imageId) { %>
+                <img
+                  src="https://www.artic.edu/iiif/2/<%= fav.imageId %>/full/400,/0/default.jpg"
+                  alt="<%= fav.title %>"
+                  class="fav-image"
+                  loading="lazy"
+                  onerror="this.parentElement.classList.add('no-image')"
+                />
+              <% } else { %>
+                <div class="fav-no-image">No Image</div>
+              <% } %>
+              <!-- dominant color swatch -->
+              <% if (fav.dominantColor && fav.dominantColor.hex) { %>
+                <div class="fav-swatch-bar" style="background:<%= fav.dominantColor.hex %>"></div>
+              <% } %>
+            </div>
+          </a>
+
+          <div class="fav-body">
+            <a href="/art/detail/<%= fav.artworkId %>" class="fav-title"><%= fav.title || 'Untitled' %></a>
+            <p class="fav-artist"><%= fav.artist || 'Unknown Artist' %></p>
+            <p class="fav-date"><%= fav.dateDisplay || '' %></p>
+
+            <!-- notes preview -->
+            <% if (fav.notes) { %>
+              <p class="fav-notes">"<%= fav.notes %>"</p>
+            <% } %>
+
+            <!-- action buttons -->
+            <div class="fav-actions">
+              <button
+                class="fav-edit-btn"
+                data-id="<%= fav._id %>"
+                data-notes="<%= fav.notes.replace(/"/g, '&quot;') %>"
+              >Edit Notes</button>
+              <button
+                class="fav-remove-btn"
+                data-id="<%= fav._id %>"
+              >Remove</button>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<!-- edit notes modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Notes</h3>
+      <button class="modal-close" id="closeModal">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea id="modalNotes" class="notes-textarea" placeholder="Your thoughts about this artwork…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="saveModalNotes">Save</button>
+      <button class="btn-ghost" id="cancelModal">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// favorites gallery interactive functionality
+(function () {
+  const modal = document.getElementById('editModal');
+  const modalNotes = document.getElementById('modalNotes');
+  let activeFavId = null;
+
+  // open edit modal with existing notes
+  document.querySelectorAll('.fav-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFavId = btn.dataset.id;
+      modalNotes.value = btn.dataset.notes;
+      modal.classList.add('open');
+      modalNotes.focus();
+    });
+  });
+
+  // close modal
+  function closeModal() {
+    modal.classList.remove('open');
+    activeFavId = null;
+  }
+
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('cancelModal').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // save notes via ajax
+  document.getElementById('saveModalNotes').addEventListener('click', async () => {
+    if (!activeFavId) return;
+
+    try {
+      const res = await fetch(`/favorites/${activeFavId}/notes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+          'X-HTTP-Method-Override': 'PUT'
+        },
+        body: new URLSearchParams({ notes: modalNotes.value }).toString()
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        const card = document.getElementById(`fav-${activeFavId}`);
+        if (card) {
+          let notesEl = card.querySelector('.fav-notes');
+          if (modalNotes.value.trim()) {
+            if (!notesEl) {
+              notesEl = document.createElement('p');
+              notesEl.className = 'fav-notes';
+              card.querySelector('.fav-actions').before(notesEl);
+            }
+            notesEl.textContent = `"${modalNotes.value.trim()}"`;
+          } else if (notesEl) {
+            notesEl.remove();
+          }
+          card.querySelector('.fav-edit-btn').dataset.notes = modalNotes.value;
+        }
+        closeModal();
+      }
+    } catch (err) {
+      console.error('save notes error:', err);
+    }
+  });
+
+  // remove favorite with animation
+  document.querySelectorAll('.fav-remove-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Remove from gallery?')) return;
+
+      const id = btn.dataset.id;
+      try {
+        const res = await fetch(`/favorites/${id}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'X-HTTP-Method-Override': 'DELETE'
+          }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.getElementById(`fav-${id}`);
+          if (card) {
+            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              card.remove();
+              const remaining = document.querySelectorAll('.fav-card').length;
+              const subtitle = document.querySelector('.page-subtitle');
+              if (subtitle) subtitle.textContent = `${remaining} saved artwork${remaining !== 1 ? 's' : ''}`;
+              if (remaining === 0) {
+                document.getElementById('favoritesGrid').innerHTML = `
+                  <div class="empty-state" style="grid-column:1/-1">
+                    <p class="empty-title">Your gallery is empty</p>
+                    <p class="empty-sub">Start saving artworks you love.</p>
+                    <a href="/art/search" class="btn-primary">Explore Art</a>
+                  </div>`;
+              }
+            }, 300);
+          }
+        }
+      } catch (err) {
+        console.error('remove error:', err);
+      }
+    });
+  });
+})();
+</script>
