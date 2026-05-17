@@ -1,0 +1,243 @@
+<div class="search-page">
+  <!-- Filters Sidebar -->
+  <aside class="filters-sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Filters</h2>
+      <% if (activeColor || activeType || query || dateStart || dateEnd) { %>
+        <a href="/art/search" class="sidebar-clear-all">Clear all</a>
+        <% } %>
+    </div>
+
+    <form action="/art/search" method="GET" id="filterForm">
+      <!-- active filters summary chips -->
+      <% if (activeColor || activeType || query || dateStart || dateEnd) { %>
+        <div class="active-filters">
+          <% if (query) { %>
+            <span class="active-filter-chip">
+              <%= query %>
+                <a href="/art/search?dateStart=<%= dateStart %>&dateEnd=<%= dateEnd %><%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                  class="chip-remove">✕</a>
+            </span>
+            <% } %>
+              <% if (dateStart || dateEnd) { %>
+                <span class="active-filter-chip">
+                  <% if (dateStart && dateEnd) { %>
+                    <%= dateStart %> – <%= dateEnd %>
+                        <% } else if (dateStart) { %>
+                          From <%= dateStart %>
+                            <% } else if (dateEnd) { %>
+                              Until <%= dateEnd %>
+                                <% } %>
+                                  <a href="/art/search?q=<%= query %><%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                                    class="chip-remove">✕</a>
+                </span>
+                <% } %>
+                  <% if (activeColor) { %>
+                    <span class="active-filter-chip">
+                      <span class="chip-dot" style="background:<%= activeColor.hex %>"></span>
+                      <%= activeColor.name %>
+                        <a href="/art/search?q=<%= query %>&dateStart=<%= dateStart %>&dateEnd=<%= dateEnd %><%= typeId ? '&typeId=' + typeId : '' %>"
+                          class="chip-remove">✕</a>
+                    </span>
+                    <% } %>
+                      <% if (activeType) { %>
+                        <span class="active-filter-chip">
+                          <%= activeType.label %>
+                            <a href="/art/search?q=<%= query %>&dateStart=<%= dateStart %>&dateEnd=<%= dateEnd %><%= colorHue ? '&colorHue=' + colorHue : '' %>"
+                              class="chip-remove">✕</a>
+                        </span>
+                        <% } %>
+        </div>
+        <% } %>
+
+          <!-- hidden fields for filter state -->
+          <input type="hidden" name="colorHue" id="colorHueHidden" value="<%= colorHue %>" />
+          <input type="hidden" name="typeId" id="typeIdHidden" value="<%= typeId %>" />
+
+          <!-- keyword search -->
+          <div class="filter-group">
+            <label class="filter-label" for="q">Keyword</label>
+            <input type="text" name="q" id="q" value="<%= query %>" class="filter-input"
+              placeholder="Title, artist, style…" />
+          </div>
+
+          <!-- date range filters -->
+          <div class="filter-group">
+            <label class="filter-label">Date Range</label>
+            <div class="date-range">
+              <input type="number" name="dateStart" value="<%= dateStart %>" class="filter-input" placeholder="From"
+                min="0" max="2024" />
+              <span class="date-sep">–</span>
+              <input type="number" name="dateEnd" value="<%= dateEnd %>" class="filter-input" placeholder="To" min="0"
+                max="2024" />
+            </div>
+          </div>
+
+          <!-- era presets -->
+          <div class="filter-group">
+            <label class="filter-label">Eras</label>
+            <div class="era-pills">
+              <a href="/art/search?q=<%= query %>&dateStart=1400&dateEnd=1600<%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                class="era-pill">Renaissance</a>
+              <a href="/art/search?q=<%= query %>&dateStart=1850&dateEnd=1910<%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                class="era-pill">Impressionist</a>
+              <a href="/art/search?q=<%= query %>&dateStart=1900&dateEnd=1945<%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                class="era-pill">Modern</a>
+              <a href="/art/search?q=<%= query %>&dateStart=1945&dateEnd=2000<%= colorHue ? '&colorHue=' + colorHue : '' %><%= typeId ? '&typeId=' + typeId : '' %>"
+                class="era-pill">Contemporary</a>
+            </div>
+          </div>
+
+          <!-- color filter options -->
+          <div class="filter-group">
+            <label class="filter-label">Colors</label>
+            <div class="color-filter-grid">
+              <% presetColors.forEach(color=> { %>
+                <button type="button" class="color-filter-btn <%= colorHue == color.hue ? 'active' : '' %>"
+                  data-hue="<%= color.hue %>" title="<%= color.name %>">
+                  <span class="color-filter-swatch" style="background:<%= color.hex %>"></span>
+                  <span class="color-filter-name">
+                    <%= color.name %>
+                  </span>
+                </button>
+                <% }) %>
+            </div>
+          </div>
+
+          <!-- artwork type filter -->
+          <div class="filter-group">
+            <label class="filter-label">Artwork Type</label>
+            <div class="type-filter-list">
+              <% sidebarTypes.forEach(type=> { %>
+                <button type="button" class="type-filter-btn <%= typeId == type.id ? 'active' : '' %>"
+                  data-type-id="<%= type.id %>">
+                  <span class="type-filter-label">
+                    <%= type.label %>
+                  </span>
+                </button>
+                <% }) %>
+            </div>
+          </div>
+
+          <button type="submit" class="filter-submit">Apply Filters</button>
+    </form>
+  </aside>
+
+  <!-- results main content -->
+  <div class="results-main">
+    <div class="results-header">
+      <h1 class="results-title">
+        <% if (query) { %>
+          Results for "<em>
+            <%= query %>
+          </em>"
+          <% } else if (activeType) { %>
+            <%= activeType.label %>
+              <% } else { %>
+                Browse Collection
+                <% } %>
+      </h1>
+      <div class="results-meta">
+        <% if (activeColor) { %>
+          <span class="results-color-badge" style="background:<%= activeColor.hex %>">
+            <%= activeColor.name %>
+          </span>
+          <% } %>
+            <% if (total> 0) { %>
+              <span class="results-count">
+                <%= total.toLocaleString() %> artworks
+              </span>
+              <% } %>
+      </div>
+    </div>
+
+    <!-- error message display -->
+    <% if (error) { %>
+      <div class="alert alert-error">
+        <%= error %>
+      </div>
+      <% } %>
+
+        <!-- empty state -->
+        <% if (artworks.length===0 && !error) { %>
+          <div class="empty-state">
+            <p class="empty-title">No artworks found</p>
+            <% if (activeColor || activeType) { %>
+              <p class="empty-sub">
+                No results matching all your filters.
+                Try removing the
+                <% if (activeColor) { %><strong>
+                    <%= activeColor.name %>
+                  </strong> color filter<% } %>
+                    <% if (activeColor && activeType) { %> or the <% } %>
+                        <% if (activeType) { %><strong>
+                            <%= activeType.label %>
+                          </strong> type filter<% } %>.
+              </p>
+              <a href="/art/search?q=<%= query %>&dateStart=<%= dateStart %>&dateEnd=<%= dateEnd %>"
+                class="btn-primary">Clear Color & Type</a>
+              <% } else { %>
+                <p class="empty-sub">Try a different search term or adjust your filters.</p>
+                <a href="/art/search" class="btn-primary">Clear All Filters</a>
+                <% } %>
+          </div>
+          <% } else { %>
+            <!-- artwork grid -->
+            <div class="artwork-grid">
+              <% artworks.forEach(artwork=> { %>
+                <%- include('../partials/artworkCard', { artwork, savedIds, user }) %>
+                  <% }) %>
+            </div>
+
+            <!-- pagination controls -->
+            <% if (pagination && pagination.total_pages> 1) { %>
+              <% const buildPageUrl=(p)=> {
+                const params = new URLSearchParams();
+                if (query) params.set('q', query);
+                if (dateStart) params.set('dateStart', dateStart);
+                if (dateEnd) params.set('dateEnd', dateEnd);
+                if (colorHue) params.set('colorHue', colorHue);
+                if (typeId) params.set('typeId', typeId);
+                params.set('page', p);
+                return '/art/search?' + params.toString();
+                };
+                const totalPages = Math.min(pagination.total_pages, 50);
+                const startPage = Math.max(1, currentPage - 2);
+                const endPage = Math.min(totalPages, currentPage + 2);
+                %>
+                <nav class="pagination">
+                  <% if (currentPage> 1) { %>
+                    <a href="<%= buildPageUrl(currentPage - 1) %>" class="page-btn">← Prev</a>
+                    <% } %>
+
+                      <% if (startPage> 1) { %>
+                        <a href="<%= buildPageUrl(1) %>" class="page-btn">1</a>
+                        <% if (startPage> 2) { %><span class="page-ellipsis">…</span>
+                          <% } %>
+                            <% } %>
+
+                              <% for (let p=startPage; p <=endPage; p++) { %>
+                                <a href="<%= buildPageUrl(p) %>"
+                                  class="page-btn <%= p === currentPage ? 'active' : '' %>">
+                                  <%= p %>
+                                </a>
+                                <% } %>
+
+                                  <% if (endPage < totalPages) { %>
+                                    <% if (endPage < totalPages - 1) { %><span class="page-ellipsis">…</span>
+                                      <% } %>
+                                        <a href="<%= buildPageUrl(totalPages) %>" class="page-btn">
+                                          <%= totalPages %>
+                                        </a>
+                                        <% } %>
+
+                                          <% if (currentPage < totalPages) { %>
+                                            <a href="<%= buildPageUrl(currentPage + 1) %>" class="page-btn">Next →</a>
+                                            <% } %>
+                </nav>
+                <% } %>
+                  <% } %>
+  </div>
+</div>
+
+<script src="/js/search-filters.js"></script>
