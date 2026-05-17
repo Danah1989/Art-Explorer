@@ -19,7 +19,7 @@ A full-stack web application for exploring the Art Institute of Chicago's public
 
 ## Website Flowchart
 the following flowchart demonstrates the main workflow of the system.
-
+![Website Flowchart](./screenshots/flowchart.png)
 ## Tech Stack
 
 | Technology | Purpose |
