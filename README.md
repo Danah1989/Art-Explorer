@@ -307,6 +307,8 @@ All filters combine in a single query:
     [view Browse Page](screenshots/browsePage.png)
 - Art details Page
     [view Art details Page](screenshots/artPage.png)
+- Personall Gallery
+   [view Personall Gallery Page](screenshots/personalGallery.png) 
 ## Future Work
 - Add an artwork recommendation system based on user preferences.
 - Enable users to leave comments and reviews on artworks.
