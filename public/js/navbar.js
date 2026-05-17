@@ -1,56 +1,67 @@
-// navbar dropdown and mobile menu functionality
-(function () {
-  document.addEventListener('DOMContentLoaded', function () {
+// Navbar dropdown and mobile menu functionality
 
-    // user dropdown menu
-    const dropdownBtn = document.getElementById('userDropdownBtn');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const userDropdown = document.getElementById('userDropdown');
+class Navbar {
+  constructor() {
+    this.dropdownBtn = document.getElementById('userDropdownBtn');
+    this.dropdownMenu = document.getElementById('dropdownMenu');
+    this.userDropdown = document.getElementById('userDropdown');
+    this.navToggle = document.getElementById('navToggle');
+    this.navLinks = document.getElementById('navLinks');
+    this.init();
+  }
 
-    if (dropdownBtn && dropdownMenu) {
-      dropdownBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const isOpen = dropdownMenu.classList.contains('open');
-        dropdownMenu.classList.toggle('open', !isOpen);
-        dropdownBtn.setAttribute('aria-expanded', String(!isOpen));
-      });
+  init() {
+    this.initDropdown();
+    this.initMobileMenu();
+  }
 
-      // close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (userDropdown && !userDropdown.contains(e.target)) {
-          dropdownMenu.classList.remove('open');
-          dropdownBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
+  // user dropdown menu
+  initDropdown() {
+    if (!this.dropdownBtn || !this.dropdownMenu) return;
 
-      // close dropdown on Escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && dropdownMenu.classList.contains('open')) {
-          dropdownMenu.classList.remove('open');
-          dropdownBtn.setAttribute('aria-expanded', 'false');
-          dropdownBtn.focus();
-        }
-      });
-    }
+    this.dropdownBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = this.dropdownMenu.classList.contains('open');
+      this.dropdownMenu.classList.toggle('open', !isOpen);
+      this.dropdownBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
 
-    // mobile navigation toggle
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
+    // close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (this.userDropdown && !this.userDropdown.contains(e.target)) {
+        this.dropdownMenu.classList.remove('open');
+        this.dropdownBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
 
-    if (navToggle && navLinks) {
-      navToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        navLinks.classList.toggle('open');
-      });
+    // close dropdown on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.dropdownMenu.classList.contains('open')) {
+        this.dropdownMenu.classList.remove('open');
+        this.dropdownBtn.setAttribute('aria-expanded', 'false');
+        this.dropdownBtn.focus();
+      }
+    });
+  }
 
-      // close mobile menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navLinks.contains(e.target) && !navToggle.contains(e.target)) {
-          navLinks.classList.remove('open');
-        }
-      });
-    }
-  });
-})();
+  // mobile navigation toggle
+  initMobileMenu() {
+    if (!this.navToggle || !this.navLinks) return;
+
+    this.navToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.navLinks.classList.toggle('open');
+    });
+
+    // close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.navLinks.contains(e.target) && !this.navToggle.contains(e.target)) {
+        this.navLinks.classList.remove('open');
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => new Navbar());

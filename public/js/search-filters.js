@@ -1,79 +1,79 @@
-// search sidebar filter interactions
-// handles color preset buttons and type filter buttons
-(function () {
-  const form = document.getElementById('filterForm');
-  const colorHueHidden = document.getElementById('colorHueHidden');
-  const typeIdHidden = document.getElementById('typeIdHidden');
+// search sidebar filters: color and type buttons
+class SearchFilters {
+  constructor() {
+    this.form = document.getElementById('filterForm');
+    this.colorHueHidden = document.getElementById('colorHueHidden');
+    this.typeIdHidden = document.getElementById('typeIdHidden');
 
-  if (!form) return;
+    if (!this.form) return;
 
-  // set initial active states from URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const urlColorHue = urlParams.get('colorHue');
-  const urlTypeId = urlParams.get('typeId');
+    this.urlParams = new URLSearchParams(window.location.search);
+    this.init();
+  }
 
-  // clear any existing active states first
-  document.querySelectorAll('.color-filter-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  document.querySelectorAll('.type-filter-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
+  init() {
+    this.restoreActiveStates();
+    this.initColorButtons();
+    this.initTypeButtons();
+  }
 
-  // set active color button based on URL
-  if (urlColorHue) {
+  // restore active button states from current url parameters
+  restoreActiveStates() {
+    const urlColorHue = this.urlParams.get('colorHue');
+    const urlTypeId = this.urlParams.get('typeId');
+
     document.querySelectorAll('.color-filter-btn').forEach(btn => {
-      if (btn.dataset.hue === urlColorHue) {
+      btn.classList.remove('active');
+      if (urlColorHue && btn.dataset.hue === urlColorHue) {
         btn.classList.add('active');
       }
     });
-  }
 
-  // set active type button based on URL
-  if (urlTypeId) {
     document.querySelectorAll('.type-filter-btn').forEach(btn => {
-      if (btn.dataset.typeId === urlTypeId) {
+      btn.classList.remove('active');
+      if (urlTypeId && btn.dataset.typeId === urlTypeId) {
         btn.classList.add('active');
       }
     });
   }
 
-  // color filter buttons
-  document.querySelectorAll('.color-filter-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      const hue = btn.dataset.hue;
-      const isActive = btn.classList.contains('active');
-
-      // if clicking an active button, clear the filter
-      if (isActive) {
-        colorHueHidden.value = '';
-      } else {
-        // otherwise set to this hue
-        colorHueHidden.value = hue;
-        // update hidden type field to preserve other filters
-      }
-
-      form.submit();
+  // color filter button click handlers
+  initColorButtons() {
+    document.querySelectorAll('.color-filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isActive = btn.classList.contains('active');
+        // toggle off if already active, otherwise apply filter
+        this.colorHueHidden.value = isActive ? '' : btn.dataset.hue;
+        // notify other classes that filter changed
+        this.emitFilterApplied('color', this.colorHueHidden.value);
+        this.form.submit();
+      });
     });
-  });
+  }
 
-  // type filter buttons
-  document.querySelectorAll('.type-filter-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      const typeId = btn.dataset.typeId;
-      const isActive = btn.classList.contains('active');
-
-      if (isActive) {
-        typeIdHidden.value = '';
-      } else {
-        typeIdHidden.value = typeId;
-      }
-
-      form.submit();
+  // artwork type filter button click handlers
+  initTypeButtons() {
+    document.querySelectorAll('.type-filter-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isActive = btn.classList.contains('active');
+        // toggle off if already active, otherwise apply filter
+        this.typeIdHidden.value = isActive ? '' : btn.dataset.typeId;
+        // notify other classes that filter changed
+        this.emitFilterApplied('type', this.typeIdHidden.value);
+        this.form.submit();
+      });
     });
-  });
-})();
+  }
+
+  // dispatch custom event for other classes to listen
+  emitFilterApplied(type, value) {
+    document.dispatchEvent(new CustomEvent('filterApplied', {
+      detail: { type, value }
+    }));
+  }
+}
+
+// initialize
+new SearchFilters();
