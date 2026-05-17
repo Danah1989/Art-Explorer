@@ -1,0 +1,114 @@
+<!-- hero Section -->
+<div class="hero">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-1">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-2">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-3">
+  <img src="/images/star1.svg" alt="" class="stars-bg star-4">
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Art Institute of Chicago Collection</p>
+    <h1 class="hero-title">Discover Art<br /><em>by Color & Era</em></h1>
+    <p class="hero-subtitle">Search thousands of public domain masterworks. Filter by color palette, time period, or
+      artistic style.</p>
+
+    <!-- search form -->
+    <form action="/art/search" method="GET" class="hero-search">
+      <input type="text" name="q" placeholder="Search by title, artist, style…" class="hero-input" autocomplete="off" />
+      <button type="submit" class="hero-search-btn">Explore</button>
+    </form>
+
+    <!-- quick filter links -->
+    <div class="hero-quick-links">
+      <a href="/art/search?q=portrait" class="quick-link">
+        <span class="ql-icon ql-portrait"></span>
+        Portraits
+      </a>
+      <a href="/art/search?q=Landscape" class="quick-link">
+        <span class="ql-icon" style="background:linear-gradient(135deg,#e63946,#457b9d,#2a9d8f)"></span>
+        Landscape
+      </a>
+      <a href="/art/search?q=Still Life" class="quick-link">
+        <span class="ql-icon ql-era"></span>
+        Still Life
+      </a>
+    </div>
+  </div>
+
+  <!-- featured artwork -->
+  <% if (featured && featured.imageUrl) { %>
+    <div class="hero-featured">
+      <a href="/art/detail/<%= featured.id %>" class="hero-img-link">
+        <img src="<%= featured.imageUrl %>" alt="<%= featured.title %>" class="hero-img" />
+        <div class="hero-img-caption">
+          <span class="caption-title">
+            <%= featured.title %>
+          </span>
+          <span class="caption-artist">
+            <%= featured.artist_title || featured.artist_display %>
+          </span>
+        </div>
+      </a>
+    </div>
+    <% } %>
+</div>
+
+
+<!-- browse by color section -->
+<section class="mood-section">
+  <h2 class="section-title">Browse by Color</h2>
+  <div class="mood-grid">
+    <a href="/art/search?colorHue=210" class="mood-card mood-calm">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Calm & Serene</span>
+      <span class="mood-desc">Blues & Greens</span>
+    </a>
+    <a href="/art/search?colorHue=0" class="mood-card mood-energetic">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Bold & Energetic</span>
+      <span class="mood-desc">Reds & Oranges</span>
+    </a>
+    <a href="/art/search?colorHue=50" class="mood-card mood-joyful">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Warm & Joyful</span>
+      <span class="mood-desc">Yellows & Golds</span>
+    </a>
+    <a href="/art/search?colorHue=275" class="mood-card mood-mysterious">
+      <div class="mood-swatch"></div>
+      <span class="mood-label">Mysterious</span>
+      <span class="mood-desc">Violets & Purples</span>
+    </a>
+  </div>
+</section>
+
+<!-- recommended by mood section -->
+<section class="mood-section">
+    <h2 class="section-title">Choose your current mood and discover matching artworks</h2>
+  <div class="mood-grid">
+    <a href="/art/search?q=landscape" class="mood-card mood-calm">
+      <span class="mood-label">Calm & Relaxing</span>
+       <span class="mood-desc">Peaceful landscapes & soothing colors</span>
+      </a>
+      <a href="/art/search?q=colorful" class="mood-card mood-happy">
+         <span class="mood-label">Bright & Happy</span>
+         <span class="mood-desc">Cheerful artworks full of light & color</span>
+        </a>
+        
+        <a href="/art/search?q=night" class="mood-card mood-dark">
+          <span class="mood-label">Dark & Moody</span>
+          <span class="mood-desc">Shadowy scenes with dramatic emotions</span>
+        </a>
+        
+        <a href="/art/search?q=love" class="mood-card mood-romantic">
+          <span class="mood-label">Romantic & Dreamy</span>
+          <span class="mood-desc">Soft portraits & emotional moments</span>
+        </a>
+        <a href="/art/search?q=garden" class="mood-card mood-nature">
+           <span class="mood-label">Natural & Fresh</span>
+           <span class="mood-desc">Nature-inspired art with outdoor beauty</span>
+          </a>
+          <a href="/art/search?q=moon" class="mood-card mood-mysterious">
+            <span class="mood-label">Mystic & Magical</span>
+            <span class="mood-desc">Moonlit scenes & mysterious fantasy vibes</span>
+          </a>
+        </div>
+      </section>
